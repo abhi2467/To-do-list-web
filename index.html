@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List - Task Manager</title>
+    
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon">
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header Section -->
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-tasks"></i> To Do List</h1>
+                <p class="subtitle">Organize your tasks, projects, and daily activities in one place. Simple, intuitive, and powerful task management.</p>
+                <div class="app-badge">
+                    <i class="fas fa-check-circle"></i> Your personal task manager
+                </div>
+            </div>
+        </header>
+        
+        <!-- Stats Section -->
+        <div class="stats-container">
+            <div class="stat-box">
+                <div class="stat-icon"><i class="fas fa-list-check"></i></div>
+                <div class="stat-value" id="totalTasks">0</div>
+                <div class="stat-label">Total Tasks</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-value" id="completedTasks">0</div>
+                <div class="stat-label">Completed</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="stat-value" id="pendingTasks">0</div>
+                <div class="stat-label">Pending</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-icon"><i class="fas fa-star"></i></div>
+                <div class="stat-value" id="highPriorityTasks">0</div>
+                <div class="stat-label">High Priority</div>
+            </div>
+        </div>
+        
+        <!-- Main App Body -->
+        <div class="app-body">
+            <!-- Input Section -->
+            <div class="input-section">
+                <div class="input-container">
+                    <i class="fas fa-pen input-icon"></i>
+                    <input type="text" id="taskInput" placeholder="Add a new task (e.g., 'Complete project report by Friday')" autocomplete="off">
+                </div>
+                
+                <div class="priority-selector">
+                    <span>Priority:</span>
+                    <div class="priority-option" data-priority="low">Low</div>
+                    <div class="priority-option active" data-priority="medium">Medium</div>
+                    <div class="priority-option" data-priority="high">High</div>
+                </div>
+                
+                <button id="addBtn"><i class="fas fa-plus"></i> Add Task</button>
+            </div>
+            
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <button class="filter-btn active" data-filter="all">
+                    <i class="fas fa-layer-group"></i> All Tasks
+                </button>
+                <button class="filter-btn" data-filter="pending">
+                    <i class="fas fa-clock"></i> Pending
+                </button>
+                <button class="filter-btn" data-filter="completed">
+                    <i class="fas fa-check-circle"></i> Completed
+                </button>
+                <button class="filter-btn" data-filter="high">
+                    <i class="fas fa-exclamation-circle"></i> High Priority
+                </button>
+            </div>
+            
+            <!-- Task List -->
+            <ul class="task-list" id="taskList">
+                <!-- Tasks will be dynamically added by JavaScript -->
+            </ul>
+            
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState">
+                <i class="fas fa-clipboard-list"></i>
+                <h3>No tasks to display</h3>
+                <p>Add your first task using the input field above, or import tasks from a JSON file.</p>
+            </div>
+            
+            <!-- File Management Section -->
+            <div class="file-management">
+                <h3><i class="fas fa-file-alt"></i> Task Data Management</h3>
+                <div class="file-content">
+                    <div class="file-text">
+                        <p>Your tasks are stored in a local JSON file format. You can export your tasks to a file for backup or transfer to another device, or import tasks from a JSON file.</p>
+                        <p><strong>Current File:</strong> <span id="currentFileName">tasks.json</span></p>
+                        <p><small><i class="fas fa-info-circle"></i> JSON format ensures compatibility with other applications</small></p>
+                    </div>
+                    <div class="file-actions">
+                        <button id="exportBtn" class="file-btn export">
+                            <i class="fas fa-download"></i> Export to JSON
+                        </button>
+                        <button id="importBtn" class="file-btn import">
+                            <i class="fas fa-upload"></i> Import from JSON
+                        </button>
+                        <button id="viewFileBtn" class="file-btn">
+                            <i class="fas fa-eye"></i> View JSON Data
+                        </button>
+                        <button id="clearAllBtn" class="file-btn danger-btn">
+                            <i class="fas fa-trash-can"></i> Clear All Tasks
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer>
+            <p>To Do List App &copy; <span id="currentYear">2023</span> | Your Personal Task Management Solution</p>
+            <div class="footer-links">
+                <a href="#" id="helpLink" class="footer-link"><i class="fas fa-question-circle"></i> Help & Guide</a>
+                <a href="#" id="aboutLink" class="footer-link"><i class="fas fa-info-circle"></i> About</a>
+                <a href="#" id="backupLink" class="footer-link"><i class="fas fa-database"></i> Auto Backup</a>
+            </div>
+            <p style="margin-top: 15px; font-size: 0.85rem;"><i class="fas fa-info-circle"></i> Tasks are stored in browser's local storage as a JSON file</p>
+        </footer>
+    </div>
+
+    <!-- File Preview Modal -->
+    <div class="modal-overlay" id="fileModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-file-code"></i> JSON File Preview</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>This is what your tasks look like in JSON format:</p>
+                <div class="file-preview" id="jsonPreview">
+                    <!-- JSON content will appear here -->
+                </div>
+                <p>You can copy this JSON data to backup your tasks or use it in other applications.</p>
+                <div class="modal-actions">
+                    <button class="modal-btn secondary" id="copyJsonBtn"><i class="fas fa-copy"></i> Copy JSON</button>
+                    <button class="modal-btn primary" id="closeModalBtn">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Help & Guide Modal -->
+    <div class="modal-overlay" id="helpModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-question-circle"></i> Help & Guide</h3>
+                <button class="modal-close" id="closeHelpModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-tabs">
+                    <button class="modal-tab active" data-tab="getting-started">Getting Started</button>
+                    <button class="modal-tab" data-tab="features">Features</button>
+                    <button class="modal-tab" data-tab="shortcuts">Shortcuts</button>
+                    <button class="modal-tab" data-tab="faq">FAQ</button>
+                    <button class="modal-tab" data-tab="tips">Tips & Tricks</button>
+                </div>
+                
+                <!-- Getting Started Tab -->
+                <div class="tab-content active" id="getting-started">
+                    <div class="help-section">
+                        <h4><i class="fas fa-rocket"></i> Welcome to To Do List App</h4>
+                        <div class="help-content">
+                            <p>This guide will help you get started with the To Do List application. Follow these simple steps to manage your tasks efficiently.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-guide">
+                        <h5><span class="step-number">1</span> Adding Tasks</h5>
+                        <p>To add a new task:</p>
+                        <ol class="help-list">
+                            <li>Type your task in the input field at the top of the page</li>
+                            <li>Select a priority level (Low, Medium, or High)</li>
+                            <li>Click the "Add Task" button or press <span class="keyboard-shortcut">Enter</span></li>
+                        </ol>
+                    </div>
+                    
+                    <div class="step-guide">
+                        <h5><span class="step-number">2</span> Managing Tasks</h5>
+                        <p>Once tasks are added, you can:</p>
+                        <ol class="help-list">
+                            <li>Mark tasks as complete by clicking the checkbox</li>
+                            <li>Edit tasks using the edit button <i class="fas fa-edit"></i></li>
+                            <li>Delete tasks using the delete button <i class="fas fa-trash"></i></li>
+                            <li>Filter tasks using the filter buttons</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="step-guide">
+                        <h5><span class="step-number">3</span> File Management</h5>
+                        <p>Your tasks are automatically saved. You can also:</p>
+                        <ol class="help-list">
+                            <li><strong>Export</strong> tasks to a JSON file for backup</li>
+                            <li><strong>Import</strong> tasks from a JSON file</li>
+                            <li><strong>View</strong> your tasks in JSON format</li>
+                            <li><strong>Clear</strong> all tasks when needed</li>
+                        </ol>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>Pro Tip:</strong> Use priority levels to categorize your tasks. High priority tasks have red borders, medium have blue, and low have green.
+                    </div>
+                </div>
+                
+                <!-- Features Tab -->
+                <div class="tab-content" id="features">
+                    <div class="help-section">
+                        <h4><i class="fas fa-star"></i> Application Features</h4>
+                        <div class="help-content">
+                            <p>The To Do List app comes packed with features to enhance your productivity:</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <i class="fas fa-plus-circle"></i>
+                            <h5>Smart Task Creation</h5>
+                            <p>Add tasks with priority levels and automatic date tracking.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <i class="fas fa-filter"></i>
+                            <h5>Advanced Filtering</h5>
+                            <p>Filter tasks by status (all, pending, completed) or priority.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <i class="fas fa-chart-bar"></i>
+                            <h5>Real-time Statistics</h5>
+                            <p>Track your progress with live task statistics.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <i class="fas fa-file-export"></i>
+                            <h5>Data Export/Import</h5>
+                            <p>Backup and restore your tasks using JSON files.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <i class="fas fa-mobile-alt"></i>
+                            <h5>Responsive Design</h5>
+                            <p>Works perfectly on desktop, tablet, and mobile devices.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <i class="fas fa-bell"></i>
+                            <h5>Notifications</h5>
+                            <p>Get visual feedback for all your actions.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <i class="fas fa-palette"></i>
+                            <h5>Visual Priority</h5>
+                            <p>Color-coded tasks based on priority levels.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <i class="fas fa-save"></i>
+                            <h5>Auto Save</h5>
+                            <p>Your tasks are automatically saved as you work.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="help-section">
+                        <h4><i class="fas fa-tachometer-alt"></i> Performance Features</h4>
+                        <div class="help-content">
+                            <ul class="help-list">
+                                <li><strong>Local Storage:</strong> All data is stored locally in your browser</li>
+                                <li><strong>No Server Required:</strong> Works completely offline</li>
+                                <li><strong>Fast Loading:</strong> Instant task loading and filtering</li>
+                                <li><strong>Smooth Animations:</strong> Pleasant visual feedback for all interactions</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Shortcuts Tab -->
+                <div class="tab-content" id="shortcuts">
+                    <div class="help-section">
+                        <h4><i class="fas fa-keyboard"></i> Keyboard Shortcuts</h4>
+                        <div class="help-content">
+                            <p>Speed up your workflow with these keyboard shortcuts:</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-guide">
+                        <h5>Task Management</h5>
+                        <ul class="help-list">
+                            <li><span class="keyboard-shortcut">Enter</span> - Add a new task</li>
+                            <li><span class="keyboard-shortcut">Tab</span> - Navigate between elements</li>
+                            <li><span class="keyboard-shortcut">Space</span> - Toggle task completion (when focused)</li>
+                            <li><span class="keyboard-shortcut">Delete</span> - Delete focused task</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step-guide">
+                        <h5>Navigation Shortcuts</h5>
+                        <ul class="help-list">
+                            <li><span class="keyboard-shortcut">Ctrl + F</span> or <span class="keyboard-shortcut">Cmd + F</span> - Focus on search/filter</li>
+                            <li><span class="keyboard-shortcut">Esc</span> - Close modals or clear input</li>
+                            <li><span class="keyboard-shortcut">Ctrl + S</span> or <span class="keyboard-shortcut">Cmd + S</span> - Quick save/export</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step-guide">
+                        <h5>Browser Shortcuts</h5>
+                        <ul class="help-list">
+                            <li><span class="keyboard-shortcut">Ctrl + Shift + I</span> - Open browser developer tools</li>
+                            <li><span class="keyboard-shortcut">Ctrl + R</span> - Refresh the page</li>
+                            <li><span class="keyboard-shortcut">Ctrl + P</span> - Print page</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>Pro Tip:</strong> Most buttons and interactive elements can be activated using the <span class="keyboard-shortcut">Space</span> or <span class="keyboard-shortcut">Enter</span> keys when focused.
+                    </div>
+                </div>
+                
+                <!-- FAQ Tab -->
+                <div class="tab-content" id="faq">
+                    <div class="help-section">
+                        <h4><i class="fas fa-question"></i> Frequently Asked Questions</h4>
+                        <div class="help-content">
+                            <p>Find answers to common questions about the To Do List app:</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Where are my tasks stored?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Your tasks are stored locally in your browser's localStorage. This means they are saved on your computer and will persist between browser sessions, but they won't sync across devices unless you export and import them.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            How do I backup my tasks?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>You can backup your tasks by clicking the "Export to JSON" button in the File Management section. This will download a JSON file with all your tasks. You can later import this file to restore your tasks.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Can I use the app offline?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes! The To Do List app works completely offline. All the code runs locally in your browser, and tasks are stored locally. You don't need an internet connection to use the app after the initial page load.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            How do I clear all my tasks?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Click the "Clear All Tasks" button in the File Management section. You'll be asked to confirm before all tasks are permanently deleted. Make sure to export a backup first if you want to keep a copy.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Can I change the priority of a task?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Yes! You can edit any task by clicking the edit button (pencil icon) next to the task. In the edit dialog, you can change the task text and update the priority level.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            Is my data secure?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Your data is completely private and stored only on your device. Since the app runs locally and doesn't connect to any servers, your tasks are only accessible from your browser on this device.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            How do I filter tasks?
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Use the filter buttons above the task list. You can show all tasks, only pending tasks, only completed tasks, or only high priority tasks. The active filter is highlighted in blue.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tips & Tricks Tab -->
+                <div class="tab-content" id="tips">
+                    <div class="help-section">
+                        <h4><i class="fas fa-magic"></i> Tips & Tricks</h4>
+                        <div class="help-content">
+                            <p>Maximize your productivity with these expert tips:</p>
+                        </div>
+                    </div>
+                    
+                    <div class="step-guide">
+                        <h5>Productivity Tips</h5>
+                        <ul class="help-list">
+                            <li><strong>Prioritize Effectively:</strong> Use high priority for urgent tasks, medium for important but not urgent, and low for routine tasks</li>
+                            <li><strong>Break Down Tasks:</strong> Large projects can be broken into smaller, manageable tasks</li>
+                            <li><strong>Daily Review:</strong> Start each day by reviewing and prioritizing your task list</li>
+                            <li><strong>Use Completion Tracking:</strong> Marking tasks complete provides a sense of accomplishment</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step-guide">
+                        <h5>Organization Strategies</h5>
+                        <ul class="help-list">
+                            <li><strong>Consistent Naming:</strong> Use clear, descriptive names for your tasks</li>
+                            <li><strong>Regular Backups:</strong> Export your tasks weekly to prevent data loss</li>
+                            <li><strong>Filter Views:</strong> Use different filters for different working modes</li>
+                            <li><strong>Color Coding:</strong> Use the visual priority indicators to quickly identify important tasks</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step-guide">
+                        <h5>Advanced Features</h5>
+                        <ul class="help-list">
+                            <li><strong>Quick Add:</strong> Press Enter after typing to quickly add tasks without reaching for the mouse</li>
+                            <li><strong>Bulk Operations:</strong> Use the clear all feature when starting fresh projects</li>
+                            <li><strong>Data Portability:</strong> Export your tasks to share with team members or use in other apps</li>
+                            <li><strong>Keyboard Navigation:</strong> Learn the keyboard shortcuts for faster task management</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>Expert Tip:</strong> Create a "Daily" task list by exporting your current tasks, clearing the list, and adding just today's tasks. At the end of the day, import your master list back and mark completed items.
+                    </div>
+                    
+                    <div class="help-section">
+                        <h4><i class="fas fa-life-ring"></i> Need More Help?</h4>
+                        <div class="help-content">
+                            <p>If you need additional assistance or have suggestions for improving the app:</p>
+                            <ul class="help-list">
+                                <li>Check the FAQ section for common questions</li>
+                                <li>Review the Getting Started guide for basic operations</li>
+                                <li>Try different features to discover what works best for your workflow</li>
+                                <li>Remember that all your data is stored locally for privacy</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div class="modal-overlay" id="aboutModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3><i class="fas fa-info-circle"></i> About To Do List</h3>
+                <button class="modal-close" id="closeAboutModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="help-content">
+                    <h4>Version 1.0.0</h4>
+                    <p>A simple, powerful task management application built with modern web technologies.</p>
+                    
+                    <div class="step-guide">
+                        <h5>Features</h5>
+                        <ul class="help-list">
+                            <li>Local storage for privacy and offline use</li>
+                            <li>JSON import/export for data portability</li>
+                            <li>Priority-based task organization</li>
+                            <li>Real-time statistics and filtering</li>
+                            <li>Responsive design for all devices</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="step-guide">
+                        <h5>Technology</h5>
+                        <ul class="help-list">
+                            <li>Built with HTML5, CSS3, and vanilla JavaScript</li>
+                            <li>Uses localStorage for data persistence</li>
+                            <li>Font Awesome icons for visual elements</li>
+                            <li>Google Fonts for typography</li>
+                            <li>No external dependencies or frameworks</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="tip-box">
+                        <i class="fas fa-code"></i>
+                        <strong>Open Source:</strong> This application is built with standard web technologies and can be modified or extended by developers.
+                    </div>
+                    
+                    <p style="margin-top: 20px; text-align: center; color: var(--gray-color);">
+                        &copy; <span id="copyrightYear">2023</span> To Do List App | All Rights Reserved
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- External JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

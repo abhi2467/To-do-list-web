@@ -1,0 +1,32 @@
+{
+  "version": "1.0",
+  "generatedAt": "2023-10-15T10:30:00.000Z",
+  "totalTasks": 3,
+  "completedTasks": 1,
+  "tasks": [
+    {
+      "id": 1697358600000,
+      "text": "Complete project proposal",
+      "completed": false,
+      "priority": "high",
+      "createdAt": "2023-10-15T09:00:00.000Z",
+      "dueDate": null
+    },
+    {
+      "id": 1697358600001,
+      "text": "Buy groceries",
+      "completed": true,
+      "priority": "medium",
+      "createdAt": "2023-10-14T15:30:00.000Z",
+      "dueDate": null
+    },
+    {
+      "id": 1697358600002,
+      "text": "Schedule dentist appointment",
+      "completed": false,
+      "priority": "low",
+      "createdAt": "2023-10-13T11:20:00.000Z",
+      "dueDate": null
+    }
+  ]
+}
